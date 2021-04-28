@@ -1,0 +1,13 @@
+---
+
+#preencha como no exemplo abaixo
+#bdaddr: localhost
+
+#Endereço do banco de dados
+db_addr: localhost
+#Nome do banco de dados
+db_ame: wikidb
+#Nome do usuário MySQL a ser criado
+db_user: wikifavelas
+#Senha do banco de dados MySQL
+db_pass: a!Cs4SHjvKh

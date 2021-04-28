@@ -1,0 +1,50 @@
+---
+- hosts: ec2-3-143-251-42.us-east-2.compute.amazonaws.com #host da máquina na AWS
+  gather_facts: yes
+  become_user: ubuntu
+  vars_files:
+    - ./vars.yml
+  tasks:
+    - name: Transfere o arquivo de criação do banco de dados
+      template:
+        src: createWikiFavelasDB.sql.j2
+        dest: /tmp/createWikiFavelasDB.sql
+      become: yes
+    - name: Atualiza o APT
+      shell: apt update
+      become: yes
+    - name: Atualiza o sistema
+      shell: apt upgrade -y
+      become: yes
+    - name: Instala o NGinx
+      shell: apt install nginx -y
+      become: yes
+    - name: Instala o MySQL
+      shell: apt install mysql-server -y
+      become: yes
+    - name: Instala o PHP e bibliotecas relacionadas
+      shell: apt install php php7-fpm php7.4-mbstring php-xml -y
+      become: yes
+    - name: Efetua o download da Mediawiki
+      shell: wget -O /tmp/mediawiki.tar.gz https://releases.wikimedia.org/mediawiki/1.35/mediawiki-1.35.2.tar.gz
+      become: yes
+    - name: Extrai o pacote da Mediawiki
+      shell: tar xvzf /tmp/mediawiki.tar.gz
+      become: yes
+    - name: Move a pasta da MediaWiki para a raiz do NGinx
+      shell: mv /tmp/mediawiki-*/* /var/www/html/
+      become: yes
+    - name: Acerta as permissões do MediaWiki - arquivos comuns [1/2]
+      shell: find /var/www/html/ -type f -exec chmod 644 {} 
+      become: yes
+    - name: Acerta as permissões do MediaWiki - pastas [2/2]
+      shell: find /var/www/html/ -type d -exec chmod 755 {}
+      become: yes
+    - name: Transfere o arquivo de configuração do NGinx
+      template:
+        src: confNginx.j2
+        dest: /etc/nginx/sites-enables/default
+      become: yes
+    - name: Reinicia o serviço do NGinx
+      shell: service nginx restart
+      become: yes
