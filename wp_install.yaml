@@ -22,8 +22,11 @@
     - name: Instala o MySQL
       shell: apt install mysql-server -y
       become: yes
+    - name: Cria o banco de dados MySQL
+      shell: mysql < /tmp/createWikiFavelasDB.sql
+      become: yes
     - name: Instala o PHP e bibliotecas relacionadas
-      shell: apt install php php7-fpm php7.4-mbstring php-xml -y
+      shell: apt install php php7-fpm php7.4-mbstring php-xml php-mysql -y
       become: yes
     - name: Efetua o download da Mediawiki
       shell: wget -O /tmp/mediawiki.tar.gz https://releases.wikimedia.org/mediawiki/1.35/mediawiki-1.35.2.tar.gz
