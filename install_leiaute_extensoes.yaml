@@ -16,6 +16,33 @@
    - name: Extrai o TagCloud para a pasta extensions do MediaWiki
      shell: tar -xvzf /tmp/WikiCategoryTagCloud-REL1_35-da252c2.tar.gz -C /var/www/html/extensions/
      become: yes
-   - name: Remove o pacot tar.gz do TagCloud
+   - name: Remove o pacote tar.gz do TagCloud
      shell: rm /tmp/WikiCategoryTagCloud-REL1_35-da252c2.tar.gz
+     become: yes
+   - name: Baixa o pacote do Mobile Frontend
+     shell: wget https://extdist.wmflabs.org/dist/extensions/MobileFrontend-REL1_35-db7c784.tar.gz -P /tmp/
+     become: yes
+   - name: Extrai o Mobile Frontend para a pasta de extensions do MediaWiki
+     shell: tar -xvzf /tmp/MobileFrontend-REL1_35-db7c784.tar.gz -C /var/www/html/extensions/
+     become: yes
+   - name: Remove o pacote tar.gz do Mobile Frontend
+     shell: rm /tmp/MobileFrontend-REL1_35-db7c784.tar.gz
+     become: yes
+   - name: Baixa o pacote do GeoData
+     shell: wget https://extdist.wmflabs.org/dist/extensions/GeoData-REL1_35-7d4e889.tar.gz -P /tmp/
+     become: yes
+   - name: Extrai o GeoData para a pasta de extensions do MediaWiki
+     shell: tar -xvzf /tmp/GeoData-REL1_35-7d4e889.tar.gz -C /var/www/html/extensions/
+     become: yes
+   - name: Remove o pacote tar.gz do GeoData
+     shell: rm /tmp/GeoData-REL1_35-7d4e889.tar.gz
+     become: yes
+   - name: Baixa o pacote do LocalisationUpdate
+     shell: wget https://extdist.wmflabs.org/dist/extensions/LocalisationUpdate-REL1_35-a485c7a.tar.gz -P /tmp/
+     become: yes
+   - name: Extrai o LocalisationUpdate para a pasta de extensions do MediaWiki
+     shell: tar -xvzf /tmp/LocalisationUpdate-REL1_35-a485c7a.tar.gz -C /var/www/html/extensions/
+     become: yes
+   - name: Remove o pacote tar.gz do LocalisationUpdate
+     shell: rm /tmp/LocalisationUpdate-REL1_35-a485c7a.tar.gz
      become: yes
