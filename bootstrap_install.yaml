@@ -1,0 +1,36 @@
+- hosts: ec2-3-143-251-42.us-east-2.compute.amazonaws.com #host da máquina na AWS
+  gather_facts: yes
+  become_user: ubuntu
+  vars_files:
+    - ./vars.yml
+  tasks:
+   - name: Faz o download do bootstrap a partir do GitHub
+     shell: wget -O /tmp/master.zip https://github.com/ProfessionalWiki/Bootstrap/archive/master.zip 
+     become: yes
+   - name: Extrai o arquivo do Bootstrap
+     shell: unzip /tmp/master.zip
+     become: yes
+   - name: Move a pasta do Bootstrap para a pasta da MediaWiki
+     shell: /tmp/Boostrap-master /var/www/html/extensions/Bootstrap
+     become: yes
+   - name: Instala o PHP-cURL e o Unzip
+     shell: apt update && apt install php-curl unzip zip -y
+     become: yes
+   - name: Download do instalador do Composer 
+     shell: wget -O /var/www/html/composer-setup.php http://getcomposer.org/installer
+     become: yes
+   - name: Instala o Composer usando o instalador #esta sendo instalado o Composer 2
+     shell: php /var/www/html/composer-setup.php
+     become: yes
+   - name: Remove o instalador do Composer
+     shell: rm /var/www/html/composer-setup.php
+     become: yes
+   - name: Instala o Bootstrap
+     shell: COMPOSER=composer.local.json php composer.phar require --no-update mediawiki/bootstrap:~4.0 -n
+     become: yes
+   - name: Atualiza o composer
+     shell: php composer.phar update
+     become: yes 
+   - name: Atualiza as definições da MediaWiki para ativar o Bootstrap
+     shell: php composer.phar update mediawiki/bootstrap --no-dev -o -n
+     become: yes 
