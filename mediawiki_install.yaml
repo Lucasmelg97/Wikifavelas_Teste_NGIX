@@ -1,0 +1,89 @@
+---
+- hosts: ec2-3-143-251-42.us-east-2.compute.amazonaws.com #host da máquina na AWS
+  gather_facts: yes
+  become_user: ubuntu
+  vars_files:
+    - ./vars.yml
+  tasks:
+    - name: Transfere o arquivo de criação do banco de dados
+      template:
+        src: createWikiFavelasDB.sql.j2
+        dest: /tmp/createWikiFavelasDB.sql
+      become: yes
+    - name: Atualiza o APT
+      shell: apt update
+      become: yes
+    - name: Atualiza o sistema
+      shell: apt upgrade -y
+      become: yes
+    - name: Instala o NGinx
+      shell: apt install nginx -y
+      become: yes
+    - name: Instala o MySQL
+      shell: apt install mysql-server -y
+      become: yes
+    - name: Cria o banco de dados MySQL
+      shell: mysql < /tmp/createWikiFavelasDB.sql
+      become: yes
+    - name: Instala o PHP e bibliotecas relacionadas
+      shell: apt install php php-fpm php7.4-mbstring php-xml php-mysql -y
+      become: yes
+    - name: Efetua o download da Mediawiki
+      shell: wget -O /tmp/mediawiki.tar.gz https://releases.wikimedia.org/mediawiki/1.35/mediawiki-1.35.2.tar.gz
+      become: yes
+    - name: Extrai o pacote da Mediawiki
+      shell: tar xvzf /tmp/mediawiki.tar.gz -C /tmp/
+      become: yes
+    - name: Move a pasta da MediaWiki para a raiz do NGinx
+      shell: mv /tmp/mediawiki-*/* /var/www/html/
+      become: yes
+    - name: Acerta as permissões do MediaWiki - arquivos comuns [1/2]
+      shell: find /var/www/html/ -type f -print0 | xargs -0 chmod -v 644
+      become: yes
+    - name: Acerta as permissões do MediaWiki - pastas [2/2]
+      shell: find /var/www/html/ -type d -print0 | xargs -0 chmod -v 755
+      become: yes
+    - name: Transfere o arquivo de configuração do NGinx
+      template:
+        src: confNginx.j2
+        dest: /etc/nginx/sites-enables/default
+      become: yes
+    - name: Reinicia o serviço do NGinx
+      shell: service nginx restart
+      become: yes
+    - name: Envia o arquivo de limpeza do Banco de dados
+      template:
+        src: limpabancowiki.sql
+        dest: /tmp/limpabancowiki.sql
+      become: yes
+    - name: Efetua a limpeza do banco de dados
+      shell: mysql < /tmp/limpabancowiki.sql 
+      become: yes
+    - name: Transfere o arquivo de imagens da MediaWiki
+      template:
+        src: images.zip
+        dest: /tmp/images.zip
+      become: yes
+    - name: Instala o Unzip
+      shell: apt install unzip -y
+      become: yes
+    - name: Extrai as imagens
+      shell: unzip /tmp/images.zip
+      become: yes
+    - name: Move as imagens para a pasta do MediaWiki
+      shell: mv /tmp/images/* /var/www/html/images/
+      become: yes
+    - name: Envia o dump do Banco de Dados do WikiFavelas
+      template:
+        src: mysql_icict_fiocruz_br.sql
+        dest: /tmp/mysql_icict_fiocruz_br.sql
+      become: yes
+    - name: Atualiza as tabelas do Banco de Dados para a base do WikiFavelas
+      shell: mysql -h {{ db_addr }} -u {{ db_user }} -p {{ db_name }} < /tmp/mysql_icict_fiocruz_br.sql
+      become: yes
+    - name: Atualiza as tabelas para o MediaWiki 1.35
+      shell: php /var/www/html/maintenance/update.php
+      become: yes
+    - name: Limpa os arquivos temporários
+      shell: rm -fr /tmp/* 
+      become: yes
