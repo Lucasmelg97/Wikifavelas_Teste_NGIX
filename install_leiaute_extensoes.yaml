@@ -1,0 +1,21 @@
+- hosts: ec2-3-143-251-42.us-east-2.compute.amazonaws.com #host da máquina na AWS
+  gather_facts: yes
+  become_user: ubuntu
+  vars_files:
+    - ./vars.yml
+  tasks:
+   - name: Atualiza o repositório do Composer 2 para instalar o FontAwesome #utiliza a versão na pasta /var/www/html
+     shell: COMPOSER=composer.local.json php composer.phar require --no-update mediawiki/font-awesome ^1.0 -n
+     become: yes
+   - name: Instala o FontAwesome #utiliza a versão na pasta /var/www/html
+     shell: php composer.phar update mediawiki/font-awesome --no-dev -o -n
+     become: yes
+   - name: Baixa o arquivo de instalação do TagCloud
+     shell: wget https://extdist.wmflabs.org/dist/extensions/WikiCategoryTagCloud-REL1_35-da252c2.tar.gz -P /tmp/
+     become: yes
+   - name: Extrai o TagCloud para a pasta extensions do MediaWiki
+     shell: tar -xvzf /tmp/WikiCategoryTagCloud-REL1_35-da252c2.tar.gz -C /var/www/html/extensions/
+     become: yes
+   - name: Remove o pacot tar.gz do TagCloud
+     shell: rm /tmp/WikiCategoryTagCloud-REL1_35-da252c2.tar.gz
+     become: yes
