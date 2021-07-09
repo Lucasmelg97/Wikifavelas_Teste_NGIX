@@ -19,3 +19,12 @@
    - name: Modidifica o LocalSettings.php para incluir a nova extensão [2/2]
      shell: echo 'require_once "$IP/extensions/DebugMode/DebugMode.php";' >> /var/www/html/LocalSettings.php
      become: yes
+   - name: Clona o repositório Git do EmbedVideo na pasta extensions do MediaWiki
+     shell: git clone https://gitlab.com/hydrawiki/extensions/EmbedVideo.git /var/www/html/extensions/EmbedVideo
+     become: yes
+   - name: Modidifica o LocalSettings.php para incluir a nova extensão [1/2]
+     shell: echo '#EmbedVideo' >> /var/www/html/LocalSettings.php
+     become: yes
+   - name: Modidifica o LocalSettings.php para incluir a nova extensão [2/2]
+     shell: echo 'wfLoadExtension("EmbedVideo");' >> /var/www/html/LocalSettings.php
+     become: yes
