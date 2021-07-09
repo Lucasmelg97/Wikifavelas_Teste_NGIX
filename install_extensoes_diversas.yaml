@@ -61,3 +61,85 @@
    - name: Modidifica o LocalSettings.php para incluir a nova extensão [2/2]
      shell: echo 'wfLoadExtension("InteractiveTimeline");' >> /var/www/html/LocalSettings.php
      become: yes
+   - name: Baixa o pacote tar.gz do JsonConfig
+     shell: wget https://extdist.wmflabs.org/dist/extensions/JsonConfig-REL1_35-06805de.tar.gz -P /tmp/
+     become: yes
+   - name: Extrai o Debug Mode para a pasta extensions do MediaWiki
+     shell: tar -xvzf /tmp/JsonConfig-REL1_35-06805de.tar.gz -C /var/www/html/extensions
+     become: yes
+   - name: Remove o pacote tar.gz do Debug Mode
+     shell: rm /tmp/JsonConfig-REL1_35-06805de.tar.gz
+     become: yes
+   - name: Modidifica o LocalSettings.php para incluir a nova extensão [1/2]
+     shell: echo '#JsonConfig' >> /var/www/html/LocalSettings.php
+     become: yes
+   - name: Modidifica o LocalSettings.php para incluir a nova extensão [2/2]
+     shell: echo 'wfLoadExtension( 'JsonConfig' );' >> /var/www/html/LocalSettings.php
+     become: yes
+   - name: Baixa o pacote zip do PDFEmbed
+     shell: wget https://gitlab.com/hydrawiki/extensions/PDFEmbed/-/archive/2.0.2/PDFEmbed-2.0.2.zip -P /tmp/
+     become: yes
+   - name: Extrai o PDFEmbed para a pasta extensions do MediaWiki
+     shell: unzip /tmp/PDFEmbed-2.0.2.zip -d /tmp/ -d /var/www/html/extensions/
+     become: yes
+   - name: Renomeia a pasta do PDFEmbed para o nome correto
+     shell: mv /var/www/html/extensions/PDFEmbed-* /var/www/html/extensions/PDFEmbed
+     become: yes
+   - name: Remove o pacote zip do PDFEmbed
+     shell: rm /tmp/PDFEmbed-2.0.2.zip
+     become: yes
+   - name: Modidifica o LocalSettings.php para incluir a nova extensão [1/2]
+     shell: echo '#PDFEmbed' >> /var/www/html/LocalSettings.php
+     become: yes
+   - name: Modidifica o LocalSettings.php para incluir a nova extensão [2/2]
+     shell: echo 'wfLoadExtension( 'PDFEmbed' );' >> /var/www/html/LocalSettings.php
+     become: yes
+   - name: Baixa o pacote tar.gz do SecureLinkFixer
+     shell: wget https://extdist.wmflabs.org/dist/extensions/SecureLinkFixer-REL1_35-e03db2a.tar.gz -P /tmp/
+     become: yes
+   - name: Extrai o SecureLinkFixer para a pasta extensions do MediaWiki
+     shell: tar -xvzf /tmp/SecureLinkFixer-REL1_35-e03db2a.tar.gz -C /var/www/html/extensions
+     become: yes
+   - name: Remove o pacote tar.gz do SecureLinkFixer
+     shell: rm /tmp/SecureLinkFixer-REL1_35-e03db2a.tar.gz
+     become: yes
+   - name: Modidifica o LocalSettings.php para incluir a nova extensão [1/2]
+     shell: echo '#SecureLinkFixer' >> /var/www/html/LocalSettings.php
+     become: yes
+   - name: Modidifica o LocalSettings.php para incluir a nova extensão [2/2]
+     shell: echo 'wfLoadExtension( 'SecureLinkFixer' );' >> /var/www/html/LocalSettings.php
+     become: yes
+   - name: Baixa o pacote tar.gz do UserExport
+     shell: wget https://extdist.wmflabs.org/dist/extensions/UserExport-REL1_35-c91b539.tar.gz -P /tmp/
+     become: yes
+   - name: Extrai o UserExport para a pasta extensions do MediaWiki
+     shell: tar -xvzf /tmp/UserExport-REL1_35-c91b539.tar.gz -C /var/www/html/extensions
+     become: yes
+   - name: Remove o pacote tar.gz do UserExport
+     shell: rm /tmp/UserExport-REL1_35-c91b539.tar.gz
+     become: yes
+   - name: Modidifica o LocalSettings.php para incluir a nova extensão [1/2]
+     shell: echo '#UserExport' >> /var/www/html/LocalSettings.php
+     become: yes
+   - name: Modidifica o LocalSettings.php para incluir a nova extensão [2/2]
+     shell: echo 'wfLoadExtension( 'UserExport' );' >> /var/www/html/LocalSettings.php
+     become: yes
+   - name: Baixa o pacote zip do WikiSEO
+     shell: wget https://github.com/octfx/wiki-seo/archive/master.zip -P /tmp/
+     become: yes
+   - name: Extrai o WikiSEO para a pasta extensions do MediaWiki
+     shell: unzip /tmp/master.zip -d /var/www/html/extensions/
+     become: yes
+   - name: Renomeia a pasta do WikiSEO para o nome correto
+     shell: mv /var/www/html/extensions/wiki-seo-master /var/www/html/extensions/WikiSEO
+     become: yes
+   - name: Remove o pacote zip do WikiSEO
+     shell: rm /tmp/master.zip
+     become: yes
+   - name: Modidifica o LocalSettings.php para incluir a nova extensão [1/2]
+     shell: echo '#WikiSEO' >> /var/www/html/LocalSettings.php
+     become: yes
+   - name: Modidifica o LocalSettings.php para incluir a nova extensão [2/2]
+     shell: echo 'wfLoadExtension( 'WikiSEO' );' >> /var/www/html/LocalSettings.php
+     become: yes
+
