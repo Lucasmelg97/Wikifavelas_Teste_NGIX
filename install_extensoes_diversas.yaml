@@ -52,3 +52,12 @@
    - name: Modidifica o LocalSettings.php para incluir a nova extensão [2/2]
      shell: echo 'wfLoadExtension("iFrame");' >> /var/www/html/LocalSettings.php
      become: yes
+   - name: Clona o repositório Git do Interactive Timeline na pasta extensions do MediaWiki
+     shell: git clone https://github.com/TheWatcher/InteractiveTimeline.git /var/www/html/extensions/InteractiveTimeline
+     become: yes
+   - name: Modidifica o LocalSettings.php para incluir a nova extensão [1/2]
+     shell: echo '#Interactive Timeline' >> /var/www/html/LocalSettings.php
+     become: yes
+   - name: Modidifica o LocalSettings.php para incluir a nova extensão [2/2]
+     shell: echo 'wfLoadExtension("InteractiveTimeline");' >> /var/www/html/LocalSettings.php
+     become: yes
