@@ -43,4 +43,12 @@
    - name: Modidifica o LocalSettings.php para incluir a nova extensão [2/2]
      shell: echo 'wfLoadExtension( 'HeadScript' );' >> /var/www/html/LocalSettings.php
      become: yes
-
+   - name: Clona o repositório Git do iFrame na pasta extensions do MediaWiki
+     shell: git clone https://github.com/sigbertklinke/Iframe /var/www/html/extensions/iFrame
+     become: yes
+   - name: Modidifica o LocalSettings.php para incluir a nova extensão [1/2]
+     shell: echo '#iFrame' >> /var/www/html/LocalSettings.php
+     become: yes
+   - name: Modidifica o LocalSettings.php para incluir a nova extensão [2/2]
+     shell: echo 'wfLoadExtension("iFrame");' >> /var/www/html/LocalSettings.php
+     become: yes
