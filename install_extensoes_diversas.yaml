@@ -28,3 +28,19 @@
    - name: Modidifica o LocalSettings.php para incluir a nova extensão [2/2]
      shell: echo 'wfLoadExtension("EmbedVideo");' >> /var/www/html/LocalSettings.php
      become: yes
+   - name: Baixa o pacote tar.gz do Head Script
+     shell: wget https://extdist.wmflabs.org/dist/extensions/HeadScript-REL1_35-f8245e3.tar.gz -P /tmp/
+     become: yes
+   - name: Extrai o Debug Mode para a pasta extensions do MediaWiki
+     shell: tar -xvzf /tmp/HeadScript-REL1_35-f8245e3.tar.gz -C /var/www/html/extensions/
+     become: yes
+   - name: Remove o pacote tar.gz do Debug Mode
+     shell: rm /tmp/HeadScript-REL1_35-f8245e3.tar.gz
+     become: yes
+   - name: Modidifica o LocalSettings.php para incluir a nova extensão [1/2]
+     shell: echo '#HeadScript' >> /var/www/html/LocalSettings.php
+     become: yes
+   - name: Modidifica o LocalSettings.php para incluir a nova extensão [2/2]
+     shell: echo 'wfLoadExtension( 'HeadScript' );' >> /var/www/html/LocalSettings.php
+     become: yes
+
